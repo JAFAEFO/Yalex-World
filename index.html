@@ -10,7 +10,7 @@ body {
     margin: 0;
     font-family: Arial, sans-serif;
     color: white;
-    overflow-x: hidden;
+    overflow: hidden;
 }
 
 /* 🎬 VIDEO */
@@ -29,7 +29,7 @@ body {
     left: 15px;
     font-size: 30px;
     cursor: pointer;
-    z-index: 10;
+    z-index: 20;
 }
 
 /* 📂 MENÚ */
@@ -39,9 +39,11 @@ body {
     left: -220px;
     width: 220px;
     height: 100%;
-    background: rgba(0,0,0,0.85);
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(10px);
     padding-top: 60px;
-    transition: 0.3s;
+    transition: 0.4s;
+    z-index: 15;
 }
 
 .menu button {
@@ -64,40 +66,43 @@ body {
     width: 25px;
 }
 
-/* 📦 SECCIONES (ANIMACIÓN PRO) */
+/* 📦 SECCIONES */
 .seccion {
     position: absolute;
     width: 100%;
+    height: 100%;
     top: 0;
     left: 0;
     padding-top: 100px;
     text-align: center;
-    min-height: 100vh;
     background-size: cover;
     background-position: center;
 
     opacity: 0;
-    transform: translateX(40px) scale(0.98);
-    filter: blur(5px);
-    transition: all 0.6s ease;
+    transform: scale(1.1);
+    filter: blur(10px);
+    transition: all 0.7s cubic-bezier(0.77, 0, 0.18, 1);
+
+    pointer-events: none;
 }
 
 .seccion.active {
     opacity: 1;
-    transform: translateX(0) scale(1);
+    transform: scale(1);
     filter: blur(0);
     z-index: 1;
+    pointer-events: auto;
 }
 
 .seccion.saliendo {
     opacity: 0;
-    transform: translateX(-40px) scale(0.98);
-    filter: blur(5px);
+    transform: scale(0.9);
+    filter: blur(10px);
 }
 
 /* 💖 TEXTO */
 h1, p {
-    text-shadow: 2px 2px 8px black;
+    text-shadow: 2px 2px 10px black;
 }
 
 /* 💖 CARTA */
@@ -118,32 +123,24 @@ canvas {
     pointer-events: none;
 }
 
-/* 📱 RESPONSIVE */
-@media (max-width: 600px) {
-    h1 { font-size: 1.8em; }
-    p { font-size: 1em; }
-}
-
 /* 🎨 FONDOS */
 #main { background: transparent; }
 #gaby { background-image: url("gaby.jpg"); }
 #evodio { background-image: url("evodio.jpg"); }
 #margarita { background-image: url("margarita.jpg"); }
 #minion { background-image: url("minion.jpg"); }
+
 </style>
 </head>
 
 <body>
 
-<!-- 🎬 VIDEO -->
 <video autoplay muted loop playsinline id="bg-video">
     <source src="video.mp4" type="video/mp4">
 </video>
 
-<!-- ☰ BOTÓN -->
 <div class="menu-btn" onclick="toggleMenu()">☰</div>
 
-<!-- 📂 MENÚ -->
 <div class="menu" id="menu">
     <button onclick="mostrar('main')">🏠 Inicio</button>
     <button onclick="mostrar('gaby')">⭐ Gaby</button>
@@ -154,37 +151,32 @@ canvas {
     <button onclick="mostrar('minion')"> Minion</button>
 </div>
 
-<!-- 🏠 MAIN -->
 <div id="main" class="seccion active">
     <h1>Weeeeell, esta sera la nueva pagina de Yalex</h1>
-    <p>Pronto se iran agregando apartados para cada quien</p>
 </div>
 
-<!-- 💖 GABY -->
 <div id="gaby" class="seccion">
     <h1>💖 Para Mi Mujel 💖</h1>
     <div id="carta"></div>
     <canvas id="canvas"></canvas>
 </div>
 
-<!-- 👤 EVODIO -->
 <div id="evodio" class="seccion">
     <h1>Evodio</h1>
 </div>
 
-<!-- 👤 MARGARITA -->
 <div id="margarita" class="seccion">
     <h1>Margarita</h1>
 </div>
 
-<!--  MINION -->
 <div id="minion" class="seccion">
     <h1> Minion</h1>
 </div>
 
-<!-- 🧠 JS MENÚ + ANIMACIÓN -->
 <script>
 let actual = document.querySelector(".seccion.active");
+let secciones = ["main","gaby","evodio","margarita","minion"];
+let index = 0;
 
 function mostrar(id) {
     const nueva = document.getElementById(id);
@@ -195,10 +187,11 @@ function mostrar(id) {
 
     setTimeout(() => {
         actual.classList.remove("saliendo");
-    }, 600);
+    }, 700);
 
     nueva.classList.add("active");
     actual = nueva;
+    index = secciones.indexOf(id);
 
     toggleMenu();
 }
@@ -207,9 +200,29 @@ function toggleMenu() {
     let menu = document.getElementById("menu");
     menu.style.left = (menu.style.left === "0px") ? "-220px" : "0px";
 }
+
+/* 📱 SWIPE */
+let startX = 0;
+
+document.addEventListener("touchstart", e => {
+    startX = e.touches[0].clientX;
+});
+
+document.addEventListener("touchend", e => {
+    let endX = e.changedTouches[0].clientX;
+
+    if (startX - endX > 50) {
+        index = (index + 1) % secciones.length;
+        mostrar(secciones[index]);
+    }
+
+    if (endX - startX > 50) {
+        index = (index - 1 + secciones.length) % secciones.length;
+        mostrar(secciones[index]);
+    }
+});
 </script>
 
-<!-- 🎬 FIX VIDEO -->
 <script>
 document.addEventListener("DOMContentLoaded", function () {
     const video = document.getElementById("bg-video");
@@ -218,7 +231,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
-<!-- 💖 CARTA -->
 <script>
 const mensaje = `Mi amor...
 
@@ -236,13 +248,12 @@ function escribir() {
     if (i <= mensaje.length) {
         document.getElementById("carta").textContent = mensaje.slice(0, i);
         i++;
-        setTimeout(escribir, 50);
+        setTimeout(escribir, 40);
     }
 }
 escribir();
 </script>
 
-<!-- ✨ CORAZONES Y ESTRELLAS -->
 <script>
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
@@ -276,12 +287,16 @@ function animar() {
         if (e.y < 0) elementos.splice(i, 1);
     });
 
-    if (Math.random() < 0.25) crear("♥️");
-    if (Math.random() < 0.15) crear("⭐");
+    if (Math.random() < 0.3) crear("♥️");
+    if (Math.random() < 0.2) crear("⭐");
 
     requestAnimationFrame(animar);
 }
 animar();
+</script>
+
+</body>
+</html>
 </script>
 
 </body>
