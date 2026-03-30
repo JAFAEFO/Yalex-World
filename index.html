@@ -31,34 +31,43 @@ body {
     z-index: 10;
 }
 
-/* 📂 MENÚ OCULTO */
+/* 📂 MENÚ */
 .menu {
     position: fixed;
     top: 0;
-    left: -200px;
-    width: 200px;
+    left: -220px;
+    width: 220px;
     height: 100%;
     background: rgba(0,0,0,0.8);
     padding-top: 60px;
     transition: 0.3s;
 }
 
+/* BOTONES */
 .menu button {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 10px;
     width: 100%;
     padding: 15px;
     border: none;
     background: none;
     color: white;
-    text-align: left;
     cursor: pointer;
+    font-size: 16px;
 }
 
 .menu button:hover {
     background: cyan;
 }
 
-/* 📦 SECCIONES */
+/* ICONO IMAGEN */
+.icono-img {
+    width: 20px;
+    height: 20px;
+}
+
+/* SECCIONES */
 .seccion {
     display: none;
     padding-top: 100px;
@@ -69,7 +78,7 @@ body {
     display: block;
 }
 
-/* 💖 CARTA */
+/* CARTA */
 #carta {
     max-width: 500px;
     margin: auto;
@@ -90,41 +99,51 @@ canvas {
 
 <body>
 
-<!-- 🎬 VIDEO -->
+<!-- VIDEO -->
 <video autoplay muted loop id="bg-video">
     <source src="video.mp4" type="video/mp4">
 </video>
 
-<!-- ☰ BOTÓN -->
+<!-- BOTÓN -->
 <div class="menu-btn" onclick="toggleMenu()">☰</div>
 
-<!-- 📂 MENÚ -->
+<!-- MENÚ -->
 <div class="menu" id="menu">
-    <button onclick="mostrar('main')">Inicio</button>
-    <button onclick="mostrar('gaby')">Gaby</button>
-    <button onclick="mostrar('evodio')">Evodio</button>
-    <button onclick="mostrar('margarita')">Margarita</button>
+    <button onclick="mostrar('main')">🏠 Inicio</button>
+
+    <button onclick="mostrar('gaby')">
+        ⭐ Gaby
+    </button>
+
+    <button onclick="mostrar('evodio')">
+        <img class="icono-img" src="https://upload.wikimedia.org/wikipedia/en/5/5a/Cruz_Azul.svg">
+        Evodio
+    </button>
+
+    <button onclick="mostrar('margarita')">
+        ❤️ Margarita
+    </button>
 </div>
 
-<!-- 🏠 MAIN -->
+<!-- MAIN -->
 <div id="main" class="seccion active">
     <h1>Weeeeell, esta sera la nueva pagina de Yalex</h1>
     <p>Pronto se iran agregando apartados para cada quien</p>
 </div>
 
-<!-- 💖 GABY -->
+<!-- GABY -->
 <div id="gaby" class="seccion">
     <h1>💖 Carta 💖</h1>
     <div id="carta"></div>
     <canvas id="canvas"></canvas>
 </div>
 
-<!-- 👤 EVODIO -->
+<!-- EVODIO -->
 <div id="evodio" class="seccion">
     <h1>Evodio</h1>
 </div>
 
-<!-- 👤 MARGARITA -->
+<!-- MARGARITA -->
 <div id="margarita" class="seccion">
     <h1>Margarita</h1>
 </div>
@@ -133,16 +152,16 @@ canvas {
 function mostrar(seccion) {
     document.querySelectorAll('.seccion').forEach(s => s.classList.remove('active'));
     document.getElementById(seccion).classList.add('active');
-    toggleMenu(); // cerrar menú al seleccionar
+    toggleMenu();
 }
 
 function toggleMenu() {
     let menu = document.getElementById("menu");
-    menu.style.left = (menu.style.left === "0px") ? "-200px" : "0px";
+    menu.style.left = (menu.style.left === "0px") ? "-220px" : "0px";
 }
 </script>
 
-<!-- 💖 CARTA -->
+<!-- CARTA -->
 <script>
 const mensaje = `Mi amor...
 
@@ -166,7 +185,7 @@ function escribir() {
 escribir();
 </script>
 
-<!-- ✨ EFECTOS -->
+<!-- EFECTOS -->
 <script>
 const canvas = document.getElementById("canvas");
 const ctx = canvas.getContext("2d");
@@ -202,6 +221,10 @@ function animar() {
     requestAnimationFrame(animar);
 }
 animar();
+</script>
+
+</body>
+</html>
 </script>
 
 </body>
