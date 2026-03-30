@@ -12,7 +12,7 @@ body {
     color: white;
 }
 
-/* 🎬 VIDEO SOLO PARA MAIN */
+/* 🎬 VIDEO */
 #bg-video {
     position: fixed;
     width: 100%;
@@ -92,21 +92,25 @@ h1, p {
     white-space: pre-line;
 }
 
+/* ✨ CANVAS */
+canvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
 /* 📱 RESPONSIVE */
 @media (max-width: 600px) {
     h1 { font-size: 1.8em; }
     p { font-size: 1em; }
 }
 
-/* 🎨 FONDOS DIFERENTES */
+/* 🎨 FONDOS */
 #main { background: transparent; }
-
 #gaby { background-image: url("gaby.jpg"); }
-
 #evodio { background-image: url("evodio.jpg"); }
-
 #margarita { background-image: url("margarita.jpg"); }
-
 #minion { background-image: url("minion.jpg"); }
 </style>
 </head>
@@ -129,7 +133,7 @@ h1, p {
         <img class="icono-img" src="cruzazul.png"> Evodio
     </button>
     <button onclick="mostrar('margarita')">❤️ Margarita</button>
-    <button onclick="mostrar('minion')">🍌 Minion</button>
+    <button onclick="mostrar('minion')"> Minion</button>
 </div>
 
 <!-- 🏠 MAIN -->
@@ -140,8 +144,9 @@ h1, p {
 
 <!-- 💖 GABY -->
 <div id="gaby" class="seccion">
-    <h1>💖 Carta 💖</h1>
+    <h1>💖 Para Mi Mujel 💖</h1>
     <div id="carta"></div>
+    <canvas id="canvas"></canvas>
 </div>
 
 <!-- 👤 EVODIO -->
@@ -154,9 +159,9 @@ h1, p {
     <h1>Margarita</h1>
 </div>
 
-<!--  MINION -->
+<!-- 🍌 MINION -->
 <div id="minion" class="seccion">
-    <h1> Minion</h1>
+    <h1>🍌 Minion</h1>
 </div>
 
 <script>
@@ -181,7 +186,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 </script>
 
-<!-- 💖 CARTA -->
+<!-- 💖 PARA MI MUJEL -->
 <script>
 const mensaje = `Mi amor...
 
@@ -203,6 +208,48 @@ function escribir() {
     }
 }
 escribir();
+</script>
+
+<!-- ✨ CORAZONES Y ESTRELLAS -->
+<script>
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+
+function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
+resize();
+window.addEventListener("resize", resize);
+
+let elementos = [];
+
+function crear(tipo) {
+    elementos.push({
+        x: Math.random() * canvas.width,
+        y: canvas.height,
+        vy: Math.random() * 2 + 1,
+        tipo: tipo
+    });
+}
+
+function animar() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    elementos.forEach((e, i) => {
+        e.y -= e.vy;
+        ctx.font = "20px Arial";
+        ctx.fillText(e.tipo, e.x, e.y);
+
+        if (e.y < 0) elementos.splice(i, 1);
+    });
+
+    if (Math.random() < 0.25) crear("♥️");
+    if (Math.random() < 0.15) crear("⭐");
+
+    requestAnimationFrame(animar);
+}
+animar();
 </script>
 
 </body>
