@@ -3,15 +3,25 @@
 <head>
     <title>Mi página</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <style>
         body {
-    margin: 0;
-    height: 100vh;
-    background-image: url("fondo.jpg");
-    background-size: cover;        /* 🔥 hace que cubra toda la pantalla */
-    background-position: center;   /* centra la imagen */
-    background-repeat: no-repeat;
-}
+            margin: 0;
+            height: 100vh;
+            font-family: Arial;
+            color: white;
+        }
+
+        /* 🎥 VIDEO DE FONDO */
+        #bg-video {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
 
         h1 {
             font-size: 3em;
@@ -25,10 +35,31 @@
         .btn:hover {
             background: white;
         }
+
+        /* 📦 CENTRAR CONTENIDO */
+        .contenido {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
     </style>
 </head>
+
 <body>
-    <h1>Weeeeell, esta sera la nueva pagina de Yalex</h1>
-    <p>Pronto se iran agrengando apartados para cada quien</p>
+
+    <!-- 🎬 VIDEO -->
+    <video autoplay muted loop playsinline id="bg-video">
+        <source src="video.mp4" type="video/mp4">
+    </video>
+
+    <!-- 📦 CONTENIDO -->
+    <div class="contenido">
+        <h1>Weeeeell, esta sera la nueva pagina de Yalex</h1>
+        <p>Pronto se iran agrengando apartados para cada quien</p>
+    </div>
+
 </body>
 </html>
