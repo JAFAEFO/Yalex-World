@@ -20,6 +20,12 @@ body {
     height: 100%;
     object-fit: cover;
     z-index: -2;
+    transition: opacity 0.5s ease;
+}
+
+#bg-video.oculto {
+    opacity: 0;
+    pointer-events: none;
 }
 
 /* ☰ BOTÓN */
@@ -75,8 +81,10 @@ body {
     left: 0;
     padding-top: 100px;
     text-align: center;
+
     background-size: cover;
-    background-position: center;
+    background-position: center center;
+    background-repeat: no-repeat;
 
     opacity: 0;
     transform: scale(1.1);
@@ -111,7 +119,7 @@ h1, p {
     margin: auto;
     font-size: 18px;
     font-style: italic;
-    color: #ff4d88;
+    color: #FFFFFF;
     white-space: pre-line;
 }
 
@@ -123,13 +131,28 @@ canvas {
     pointer-events: none;
 }
 
-/* 🎨 FONDOS */
+/* 🎨 FONDOS AJUSTADOS */
 #main { background: transparent; }
-#gaby { background-image: url("gaby.jpg"); }
-#evodio { background-image: url("evodio.jpg"); }
-#margarita { background-image: url("margarita.jpg"); }
-#minion { background-image: url("minion.jpg"); }
 
+#gaby {
+    background-image: url("gaby.jpg");
+    background-position: center 25%;
+}
+
+#evodio {
+    background-image: url("evodio.jpg");
+    background-position: center;
+}
+
+#margarita {
+    background-image: url("margarita.jpg");
+    background-position: center;
+}
+
+#minion {
+    background-image: url("minion.jpg");
+    background-position: center;
+}
 </style>
 </head>
 
@@ -161,22 +184,15 @@ canvas {
     <canvas id="canvas"></canvas>
 </div>
 
-<div id="evodio" class="seccion">
-    <h1>Evodio</h1>
-</div>
-
-<div id="margarita" class="seccion">
-    <h1>Margarita</h1>
-</div>
-
-<div id="minion" class="seccion">
-    <h1> Minion</h1>
-</div>
+<div id="evodio" class="seccion"><h1>Evodio</h1></div>
+<div id="margarita" class="seccion"><h1>Margarita</h1></div>
+<div id="minion" class="seccion"><h1> Minion</h1></div>
 
 <script>
 let actual = document.querySelector(".seccion.active");
 let secciones = ["main","gaby","evodio","margarita","minion"];
 let index = 0;
+const video = document.getElementById("bg-video");
 
 function mostrar(id) {
     const nueva = document.getElementById(id);
@@ -193,6 +209,12 @@ function mostrar(id) {
     actual = nueva;
     index = secciones.indexOf(id);
 
+    if (id === "main") {
+        video.classList.remove("oculto");
+    } else {
+        video.classList.add("oculto");
+    }
+
     toggleMenu();
 }
 
@@ -201,33 +223,30 @@ function toggleMenu() {
     menu.style.left = (menu.style.left === "0px") ? "-220px" : "0px";
 }
 
-/* 📱 SWIPE */
+/* 📱 SWIPE PRO */
 let startX = 0;
+let startY = 0;
 
 document.addEventListener("touchstart", e => {
     startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
 });
 
 document.addEventListener("touchend", e => {
     let endX = e.changedTouches[0].clientX;
+    let endY = e.changedTouches[0].clientY;
 
-    if (startX - endX > 50) {
-        index = (index + 1) % secciones.length;
+    let dx = endX - startX;
+    let dy = endY - startY;
+
+    if (Math.abs(dx) > 100 && Math.abs(dx) > Math.abs(dy)) {
+        if (dx < 0) {
+            index = (index + 1) % secciones.length;
+        } else {
+            index = (index - 1 + secciones.length) % secciones.length;
+        }
         mostrar(secciones[index]);
     }
-
-    if (endX - startX > 50) {
-        index = (index - 1 + secciones.length) % secciones.length;
-        mostrar(secciones[index]);
-    }
-});
-</script>
-
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-    const video = document.getElementById("bg-video");
-    video.muted = true;
-    video.play().catch(() => {});
 });
 </script>
 
@@ -293,10 +312,6 @@ function animar() {
     requestAnimationFrame(animar);
 }
 animar();
-</script>
-
-</body>
-</html>
 </script>
 
 </body>
